@@ -14,7 +14,7 @@ import 'package:stattrak/widgets/appbar.dart';    // Ensure path is correct
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Ensure API Key is loaded
-final String geoapifyApiKey = 'b443d51cf9934664828c14742e5476d9';
+final String geoapifyApiKey = '5304474d562740b8a77f6ec91f9eee76';
 
 class MapPage extends StatefulWidget {
   @override
@@ -97,7 +97,7 @@ class _MapPageState extends State<MapPage> {
         routeListToUpdate: routeAlternatives,
         updateStateCallback: () { if (mounted) setState(() => _isLoadingRoutes = false); },
         fitMapCallback: () => mf.fitMapToRoutes(routeAlternatives: routeAlternatives, mapController: mapController),
-        apiKey: 'b443d51cf9934664828c14742e5476d9',
+        apiKey: '5304474d562740b8a77f6ec91f9eee76',
         showInfoMessage: _showInfoSnackbar,
         showErrorMessage: _showErrorSnackbar,
       ).catchError((e){ if (mounted) setState(() => _isLoadingRoutes = false); });

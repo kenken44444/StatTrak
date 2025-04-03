@@ -103,7 +103,7 @@ class _SharedRoutePageState extends State<SharedRoutePage> {
         startLng: startLng,
         endLat: endLat,
         endLng: endLng,
-        apiKey: 'b443d51cf9934664828c14742e5476d9',
+        apiKey: '5304474d562740b8a77f6ec91f9eee76',
       );
 
       setState(() {

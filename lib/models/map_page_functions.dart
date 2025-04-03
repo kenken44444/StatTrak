@@ -126,7 +126,7 @@ Future<RouteInfo?> _fetchRouteByTypeInternal({
 
 /// Fetches location suggestions from Geoapify Geocoding API.
 Future<List<Map<String, dynamic>>> fetchLocations(String query, String apiKey) async {
-  if (apiKey.isEmpty || apiKey == "b443d51cf9934664828c14742e5476d9") {
+  if (apiKey.isEmpty || apiKey == "MISSING_GEOAPIFY_KEY") {
     print("Geoapify API Key is missing or invalid for location search.");
     return [];
   }
