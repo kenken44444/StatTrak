@@ -7,9 +7,6 @@ import 'package:stattrak/widgets/appbar.dart';
 import 'package:stattrak/youtube_player_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:geolocator/geolocator.dart';
-
 
 class ProfilePage extends StatefulWidget {
   final String? userId;
@@ -42,7 +39,6 @@ class _ProfilePageState extends State<ProfilePage> {
   double? _longitude;
   List<Map<String, dynamic>> _userPosts = [];
   List<String> _featuredPhotos = [];
-
   final int _maxFeaturedPhotos = 4;
 
   bool get _isOwnProfile {
@@ -93,7 +89,6 @@ class _ProfilePageState extends State<ProfilePage> {
         if (!_isOwnProfile) _checkFriendshipStatus(),
       ]);
     } catch (e) {
-      debugPrint("Error initializing profile data: $e");
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Error loading profile data: $e"))
@@ -136,7 +131,6 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       }
     } catch (e) {
-      debugPrint('Error fetching profile for $targetUserId: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Could not load profile: ${e is PostgrestException ? e.message : e.toString()}"))
@@ -166,7 +160,6 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
-      debugPrint('Error fetching user posts for $targetUserId: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("Could not load posts."))
@@ -187,9 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await _fetchUserPosts();
     } catch (e) {
       if (e is PostgrestException && e.code == '23505') {
-        debugPrint("Post $postId already liked by ${currentUser.id}");
       } else {
-        debugPrint("Error liking post $postId: $e");
         if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to like post")));
       }
     }
@@ -207,7 +198,6 @@ class _ProfilePageState extends State<ProfilePage> {
           .eq('post_id', postId);
       await _fetchUserPosts();
     } catch (e) {
-      debugPrint("Error unliking post $postId: $e");
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to unlike post")));
     }
   }
@@ -237,7 +227,6 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
-      debugPrint('Error checking friendship status: $e');
       if (mounted) setState(() => _friendshipStatus = 'none');
     }
   }
@@ -269,7 +258,6 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       }
     } catch (e) {
-      debugPrint('Error sending friend request: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error sending request: ${e is PostgrestException ? e.message : e}")),
@@ -319,27 +307,6 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
-
-  Future<void> _launchYouTubeUrl(String url) async {
-    if (url.isEmpty) return;
-
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = 'https://$url';
-    }
-
-    final Uri? uri = Uri.tryParse(url);
-    if (uri != null && await canLaunchUrl(uri)) {
-      try {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } catch (e) {
-        debugPrint("Could not launch $url: $e");
-        if(mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not launch URL: $url')));
-      }
-    } else {
-      if(mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Invalid or unlaunchable URL: $url')));
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -443,13 +410,13 @@ class _ProfilePageState extends State<ProfilePage> {
             label: const Text('Edit Profile', style: TextStyle(color: Colors.blue,)),
             onPressed: _showEditProfileDialog,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white, // Background color
-              foregroundColor: Colors.white, // Text and icon color
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
                 side: BorderSide(
-                  color: Colors.blue,  // Border color
-                  width: 1,  // Border width
+                  color: Colors.blue,
+                  width: 1,
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -720,20 +687,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<void> _pickAndUploadFeaturedPhoto() async {
-    if (_featuredPhotos.length >= _maxFeaturedPhotos) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Maximum $_maxFeaturedPhotos featured photos allowed')),
-      );
-      return;
-    }
-    await _uploadPhoto(isAvatar: false);
-  }
-
-  Future<void> _pickAndUploadAvatar() async {
-    await _uploadPhoto(isAvatar: true);
-  }
-
   Future<void> _uploadPhoto({required bool isAvatar}) async {
     final supabase = Supabase.instance.client;
     final user = supabase.auth.currentUser;
@@ -780,7 +733,6 @@ class _ProfilePageState extends State<ProfilePage> {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Photo uploaded successfully!')));
 
     } catch (e) {
-      debugPrint('Error uploading photo: $e');
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error uploading photo: $e')));
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -796,7 +748,6 @@ class _ProfilePageState extends State<ProfilePage> {
             (route) => false,
       );
     } catch(e) {
-      debugPrint("Logout error: $e");
       if(mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Logout failed: $e")));
     }
   }
