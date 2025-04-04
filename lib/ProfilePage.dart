@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stattrak/login_page.dart';
 import 'package:stattrak/providers/weather_provider.dart';
 import 'package:stattrak/youtube_player_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -290,6 +291,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     IconButton(
                       onPressed: () async {
                         await Supabase.instance.client.auth.signOut();
+                        if (mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => LoginPage()),
+                          );
+                        }
                       },
                       icon: const Icon(Icons.power_settings_new),
                       color: Colors.cyanAccent[100],
