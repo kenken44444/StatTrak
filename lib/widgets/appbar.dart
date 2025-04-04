@@ -46,7 +46,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Left side icons
               _buildAppBarButton(
                 context,
-                "assets/icons/Home.png",
+                "/icons/Home.png",
                 Colors.white,
                     () {
                   Navigator.push(
@@ -57,7 +57,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               _buildAppBarButton(
                 context,
-                "assets/icons/Map.png",
+                "/icons/Map.png",
                 Colors.white,
                     () {
                   Navigator.push(
@@ -70,7 +70,7 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Right side icons
               _buildAppBarButton(
                 context,
-                "assets/icons/Friends.png",
+                "/icons/Friends.png",
                 Colors.white,
                     () {
                   showDialog(
@@ -94,13 +94,13 @@ class MyCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               _buildAppBarButton(
                 context,
-                "assets/icons/Group.png",
+                "/icons/Group.png",
                 Colors.white,
                 onGroupPressed,
               ),
               _buildAppBarButton(
                 context,
-                "assets/icons/Notification.png",
+                "/icons/Notification.png",
                 Colors.white,
                 onNotificationPressed,
               ),
